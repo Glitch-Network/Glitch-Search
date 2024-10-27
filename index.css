@@ -1,0 +1,10 @@
+/* Custom CSS for black theme */
+body {
+  background-color: white;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+* {
+  display: none;
+}

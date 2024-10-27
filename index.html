@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Glitch Search</title>
+    <link rel="icon" type="image/x-icon" href="https://glitchnetwork.xyz/assets/favicon.png">
+</head>
+<body>
+    <iframe style="position: fixed; inset: 0px; outline: none; border: none; height: 100%; width: 100%;" id="frame"></iframe>
+</body>
+<script src="uv/uv.bundle.js" defer></script>
+<script src="uv/uv.config.js" defer></script>
+<script>
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+    // Set the URL parameter in sessionStorage
+    sessionStorage.setItem("url", getUrlParameter("q"));
+
+    // Load launch.html initially in the iframe
+    document.getElementById("frame").src = "launch.html";
+
+    setInterval(function() {
+        try {
+            // Check if __uv$config is defined and retrieve frame source if so
+            if (typeof __uv$config !== 'undefined') {
+                let frameSrc = document.getElementById("frame").contentWindow.location.href.split(__uv$config.prefix)[1];
+
+                // Check the frame URL and redirect if conditions are met
+                if (frameSrc && frameSrc !== "launch.html" && !__uv$config.decodeUrl(frameSrc).startsWith("https://google.com")) {
+                    window.location.href = __uv$config.decodeUrl(frameSrc);
+                }
+            }
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
+    }, 50);
+</script>
+</html>
